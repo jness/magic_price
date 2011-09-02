@@ -1,0 +1,21 @@
+<html>
+<head>
+<title>Deck Price</title>
+</head>
+
+<body>
+<h1>Magic the Gathering Deck Price</h1>
+
+{% if error %}
+ <font color='red'>{{ error|safe }}</font>
+{% endif %}
+
+<form name="form" action="." method="POST">
+{% csrf_token %}
+<textarea cols="45" rows="20" name="deck">
+{% if data %}{{ data }}{% else %}1 Giant Growth{% endif %}
+</textarea><br>
+<input type="submit" value="Price" />
+</form>
+</body>
+</html>
