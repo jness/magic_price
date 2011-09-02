@@ -31,7 +31,7 @@ def index(request):
                 quoted_card = quote(card)
                 u = urlopen('http://magic.tcgplayer.com/db/wp-ch.asp?CN=%s' % quoted_card)
                 try:
-                    prices = compile('\$(\d.\d\d)\r\n[\t]*</div>').findall(u.read())
+                    prices = compile('\$(\d*.\d\d)\r\n[\t]*</div>').findall(u.read())
                     lowest_price = prices[2]
                 except IndexError:
                     message = 'Unable to get card <b>%s</b>, please check spelling' % card
