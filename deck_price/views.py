@@ -37,12 +37,18 @@ def index(request):
     total_cost = []
     message = []
     results = []
+    clean_data = ''
 
     # check our POST by name deck contains data
     # else raise a 404 page
     if data:
         # split input on new line chara
         for line in data.split('\n'):
+
+            # ignore empty lines
+            if line.isspace() or not line:
+                continue
+
             # perform a search on the 1 character
             # and be sure they are decimals
             c = search('^(\d+)', line)
@@ -83,14 +89,19 @@ def index(request):
         # this gives os the total deck cost
         deck_total = ('%.2f' % (sum(float(i) for i in total_cost)))
 
+        # append data to clean_data var,
+        # this should avoid multiple cache for same results
+        clean_data = clean_data + '%s %s\n' % (count, card)
+
         # create a unique hash of our data
         # and add to sqlite database if new item
-        deck_hash = md5(data).hexdigest()
+        deck_hash = md5(clean_data).hexdigest()
         try:
             Decks.objects.get(hash=deck_hash)
         except ObjectDoesNotExist:
-            c = Decks(hash=deck_hash, post=data)
+            c = Decks(hash=deck_hash, post=clean_data)
             c.save()
+
 
         # provide a direct url
         url = 'http://%s/?hash=%s' % (request.META['HTTP_HOST'], deck_hash)
@@ -98,7 +109,7 @@ def index(request):
         # if we had any error messages return them and send the user 
         # to the home page
         if message:
-            return render(request, 'index.html', {'error': message, 'data': data}) 
+            return render(request, 'index.html', {'error': message, 'data': clean_data}) 
 
         # if no error messages return a price list
         else:
