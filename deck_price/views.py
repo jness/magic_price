@@ -109,7 +109,7 @@ def index(request):
         # if we had any error messages return them and send the user 
         # to the home page
         if message:
-            return render(request, 'index.html', {'error': message, 'data': clean_data}) 
+            return render(request, 'index.html', {'error': message, 'data': data}) 
 
         # if no error messages return a price list
         else:
