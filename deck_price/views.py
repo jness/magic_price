@@ -79,7 +79,7 @@ def index(request):
 
             # create a dict which will be returned to the 
             # django template
-            results.append({'name': card, 
+            results.append({'name': card.title(), 
                             'count': count, 
                             'price_each': lowest_price, 
                             'price': '%.2f' % (float(lowest_price) * int(count))})
@@ -91,29 +91,27 @@ def index(request):
 
         # append data to clean_data var,
         # this should avoid multiple cache for same results
-        clean_data = clean_data + '%s %s\n' % (count, card)
+        clean_data = clean_data + '%s %s\n' % (count, card.title())
 
-        # create a unique hash of our data
-        # and add to sqlite database if new item
-        deck_hash = md5(clean_data).hexdigest()
-        try:
-            Decks.objects.get(hash=deck_hash)
-        except ObjectDoesNotExist:
-            c = Decks(hash=deck_hash, post=clean_data)
-            c.save()
+        # only create cache if no errors were givin
+        if not message:
+            # create a unique hash of our data
+            # and add to sqlite database if new item
+            deck_hash = md5(clean_data).hexdigest()
+            try:
+                Decks.objects.get(hash=deck_hash)
+            except ObjectDoesNotExist:
+                c = Decks(hash=deck_hash, post=clean_data)
+                c.save()
 
-
-        # provide a direct url
-        url = 'http://%s/?hash=%s' % (request.META['HTTP_HOST'], deck_hash)
-
-        # if we had any error messages return them and send the user 
-        # to the home page
-        if message:
-            return render(request, 'index.html', {'error': message, 'data': data}) 
-
-        # if no error messages return a price list
-        else:
+            # provide a direct url
+            url = 'http://%s/?hash=%s' % (request.META['HTTP_HOST'], deck_hash)
             return render(request, 'list.html', {'results': results, 'total': deck_total, 'short': url})
+
+        else:
+            # if we had any error messages return them and send the user 
+            # to the home page
+            return render(request, 'index.html', {'error': message, 'data': data}) 
 
     else:
         raise Http404
