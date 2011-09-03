@@ -45,7 +45,7 @@ def index(request):
         for line in data.split('\n'):
             # perform a search on the 1 character
             # and be sure they are decimals
-            c = search('^\d*', line)
+            c = search('^(\d+)', line)
             if c:
                 count = c.group(0)
             else:
