@@ -1,10 +1,11 @@
 <html>
 <head>
-<title>Deck Price</title>
+<title>MTG: Deck Pricer</title>
 </head>
 
 <body>
-<h1>Magic the Gathering Deck Price</h1>
+<center>
+<img src='/static/mtg.jpg' /><br>
 
 {% if error %}
 <font color='red'>Failed to lookup up the following cards:<br>
@@ -16,10 +17,13 @@
 
 <form name="form" action="." method="POST">
 {% csrf_token %}
-<textarea cols="45" rows="20" name="deck">
+<textarea cols="50" rows="25" name="deck">
 {% if data %}{{ data }}{% else %}1 Giant Growth{% endif %}
 </textarea><br>
-<input type="submit" value="Price" />
+<input type="submit" value="Price Deck!" />
 </form>
+<font size='2'><br><br><b>Prices Provided By:</b></font><br>
+<a border='0' href='http://tcgplayer.com'><img src='/static/tcgplayer.jpg' /></a><br>
 </body>
+</center>
 </html>
