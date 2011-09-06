@@ -1,14 +1,11 @@
-<html>
-<head>
-<title>MTG: Deck Pricer</title>
-</head>
-
+{% include 'header.html' %}
 <body>
 <center>
 <img src='/static/mtg.jpg' /><br>
 
 <h3><a href='.'><font color='blue' size='3'>Price New Deck</font></a></h3>
 <b><font size='2'>Direct Link:</font></b> <a href='{{ short }}'><font color='blue' size='2'>{{ short }}</font></a><br><br>
+<ul class="hoverbox">
 <table cellpadding='4' width='575'>
   <tr bgcolor='black'>
  	 <td width='50'><font color='white'><b>#</b></font></td>
@@ -20,7 +17,12 @@
   {% for r in results %}
   <tr>
 	 <td>{{ r.count }}</td>
-	 <td><a href='gatherer/{{ r.name }}'><font color='blue'>{{ r.name }}</font></a></td>
+	 <td>
+           <a target='_blank' class="hoverbox" href="/gatherer/{{ r.name }}" onmouseover="this.children[0].src='http://magic.tcgplayer.com/db/wp-ch.asp?CN={{ r.name|escapejs }}'"
+>{{ r.name }}<iframe class="preview" width='100' height='100' src='about:blank'></iframe>
+           </a>
+    </td>
+
 	 <td><a href='http://magic.tcgplayer.com/db/magic_single_card.asp?cn={{ r.name }}'><font color='blue'>${{ r.price_each }}</font></a></td>
 	 <td><a href='http://magic.tcgplayer.com/db/magic_single_card.asp?cn={{ r.name }}'><font color='blue'>${{ r.price }}</font></a></td>
   </tr>
@@ -34,9 +36,5 @@
 	 </td>
   </td>
 </table>
-
-<font size='2'><br><br><b>Prices Provided By:</b></font><br>
-<a border='0' href='http://tcgplayer.com'><img src='/static/tcgplayer.jpg' /></a><br>
-</center>
-</body>
-</html>
+</ul>
+{% include 'footer.html' %}
