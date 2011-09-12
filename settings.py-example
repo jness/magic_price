@@ -8,6 +8,9 @@ ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
 
+BITLY_API_USER = ''
+BITLY_API_KEY = ''
+
 MANAGERS = ADMINS
 
 DATABASES = {
