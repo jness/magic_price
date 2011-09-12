@@ -85,13 +85,13 @@ def index(request):
                             'price': '%.2f' % (float(lowest_price) * int(count))})
             total_cost.append('%.2f' % (float(lowest_price) * int(count)))
 
+            # append data to clean_data var,
+            # this should avoid multiple cache for same results
+            clean_data = clean_data + '%s %s\n' % (count, card.title())
+
         # using all the total prices add them together as a float,
         # this gives os the total deck cost
         deck_total = ('%.2f' % (sum(float(i) for i in total_cost)))
-
-        # append data to clean_data var,
-        # this should avoid multiple cache for same results
-        clean_data = clean_data + '%s %s\n' % (count, card.title())
 
         # only create cache if no errors were givin
         if not message:
