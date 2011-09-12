@@ -3,9 +3,11 @@ from django.http import HttpResponseRedirect, Http404
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.core.exceptions import ObjectDoesNotExist
+from django.conf import settings
 
 from deck_price.models import Decks
 
+import bitlyapi
 from  hashlib import md5
 from urllib import urlencode
 from urllib2 import urlopen, quote, Request
@@ -105,7 +107,15 @@ def index(request):
                 c.save()
 
             # provide a direct url
-            url = 'http://%s/?hash=%s' % (request.META['HTTP_HOST'], deck_hash)
+            direct_url = 'http://%s/?hash=%s' % (request.META['HTTP_HOST'], deck_hash)
+
+            # add bitly
+            api_user = settings.BITLY_API_USER
+            api_key = settings.BITLY_API_KEY
+            b = bitlyapi.BitLy(api_user, api_key)
+            res = b.shorten(longUrl='%s' % direct_url)
+            url = res['url']
+
             return render(request, 'list.html', {'results': results, 'total': deck_total, 'short': url})
 
         else:
